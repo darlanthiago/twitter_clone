@@ -1,0 +1,109 @@
+<nav class="navbar navbar-expand-lg shadow-sm menu">
+	<div class="container">
+		<div class="navbar-nav">
+			<a class="menuItem" href="/timeline">
+				Home
+			</a>
+
+			<a class="menuItem" href="/sair">
+				Sair
+			</a>
+			<img src="/img/twitter_logo.png" class="menuIco" />
+		</div>
+	</div>
+</nav>
+
+<div class="container body-timeline">
+	<div class="row pt-2">
+
+		<div class="col-md-3">
+
+			<div class="perfil">
+				<div class="perfilTopo">
+
+				</div>
+
+				<div class="perfilPainel ">
+
+					<div class="row mt-2 mb-2">
+						<div class="col mb-2">
+							<span class="perfilPainelNome"><?= $_SESSION['nome'] ?></span>
+						</div>
+					</div>
+
+					<div class="row mb-2">
+
+						<div class="col">
+							<span class="perfilPainelItem">Tweets</span><br />
+							<span class="perfilPainelItemValor"><?= $this->view->total_tweets['total_tweet'] ?></span>
+						</div>
+
+						<div class="col">
+							<span class="perfilPainelItem">Seguindo</span><br />
+							<span class="perfilPainelItemValor"><?= $this->view->total_seguindo['total_seguindo'] ?></span>
+						</div>
+
+						<div class="col">
+							<span class="perfilPainelItem">Seguidores</span><br />
+							<span class="perfilPainelItemValor"><?= $this->view->total_seguidores['total_seguidores'] ?></span>
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+
+		</div>
+
+		<div class="col-md-6">
+
+			<div class="row mb-2">
+				<div class="col">
+					<div class="card shadow-sm">
+						<div class="card-body">
+							<form method="get" action="/quem_seguir">
+								<div class="input-group mb-3">
+									<input type="text" class="form-control" name="search" value="<?= (isset($_GET['search']) && !empty($_GET['search'])) ? $_GET['search'] : '' ?>" placeholder="Quem você está procurando?">
+									<div class="input-group-append">
+										<button class="btn btn-primary" type="submit"><i class="fas fa-search"></i></button>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<?php foreach ($this->view->usuarios as $id => $usuario) : ?>
+				<div class="row mb-2">
+					<div class="col">
+						<div class="card shadow-sm">
+							<div class="card-body">
+								<div class="row">
+									<div class="col-md-6">
+										<?= $usuario['nome'] ?>
+									</div>
+
+									<div class="col-md-6 d-flex justify-content-end">
+										<div>
+											<?php
+												if ($usuario['seguindo_sn'] == 0) { ?>
+												<a href="/acao?acao=seguir&&id_usuario=<?= $usuario['id'] ?>&&current_search=<?= $_SERVER['REQUEST_URI'] ?>"><button class="btn btn-primary" id="btn-actions" data-toggle="tooltip" data-placement="left" title="Seguir"><i class="fas fa-heart"></i></button></a>
+
+											<?php }
+												if ($usuario['seguindo_sn'] == 1) { ?>
+												<a href="/acao?acao=deixarSeguir&&id_usuario=<?= $usuario['id'] ?>&&current_search=<?= $_SERVER['REQUEST_URI'] ?>"><button class="btn btn-danger" id="btn-actions" data-toggle="tooltip" data-placement="right" title="Deixar de seguir"><i class="fas fa-heart-broken"></i></button></a>
+
+											<?php } ?>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			<?php endforeach; ?>
+
+		</div>
+	</div>
+</div>

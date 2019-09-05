@@ -1,0 +1,128 @@
+<nav class="navbar navbar-expand-lg shadow-sm menu">
+	<div class="container">
+		<div class="navbar-nav">
+			<a class="menuItem" href="/timeline">
+				Home
+			</a>
+
+			<a class="menuItem" href="/sair">
+				Sair
+			</a>
+			<a href="/timeline"><img src="/img/twitter_logo.png" class="menuIco" /></a>
+		</div>
+	</div>
+</nav>
+
+<div class="container body-timeline">
+	<?php if (isset($_GET['tweet']) && $_GET['tweet'] == 'success_delete') : ?>
+		<div class="alert alert-primary alert-dismissible fade show" role="alert">
+			<strong>Tweet excluído com sucesso!</strong>
+			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+	<?php endif; ?>
+	<div class="row pt-2">
+
+		<div class="col-md-3">
+
+			<div class="perfil shadow-sm">
+				<div class="perfilTopo">
+
+				</div>
+
+				<div class="perfilPainel ">
+
+					<div class="row mt-2 mb-2">
+						<div class="col mb-2">
+							<span class="perfilPainelNome"><?= $_SESSION['nome'] ?></span>
+						</div>
+					</div>
+
+					<div class="row mb-2">
+
+						<div class="col">
+							<span class="perfilPainelItem">Tweets</span><br />
+							<span class="perfilPainelItemValor"><?= $this->view->total_tweets['total_tweet'] ?></span>
+						</div>
+
+						<div class="col">
+							<span class="perfilPainelItem">Seguindo</span><br />
+							<span class="perfilPainelItemValor"><?= $this->view->total_seguindo['total_seguindo'] ?></span>
+						</div>
+
+						<div class="col">
+							<span class="perfilPainelItem">Seguidores</span><br />
+							<span class="perfilPainelItemValor"><?= $this->view->total_seguidores['total_seguidores'] ?></span>
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+
+		</div>
+
+		<div class="col-md-6">
+			<div class="row mb-2">
+				<div class="col tweetBox shadow-sm">
+					<?php if (isset($_GET['tweet']) && $_GET['tweet'] == urldecode('success')) : ?>
+						<div class="alert alert-primary alert-dismissible fade show" role="alert">
+							<strong>Tweet compartilhado!</strong>
+							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+					<?php endif; ?>
+					<form method="post" action="/tweet">
+						<textarea class="form-control shadow-sm" id="tweet-area" name="tweet" rows="5"></textarea>
+						<div class="col mt-2 d-flex justify-content-end">
+							<button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane mr-2"></i>Tweet</button>
+						</div>
+
+					</form>
+				</div>
+			</div>
+
+			<?php
+
+			if (count($this->view->tweets) > 0) {
+				foreach ($this->view->tweets as $id_tweet => $tweet) : ?>
+					<div class="row tweet shadow-sm">
+						<div class="col">
+							<p><strong><?= $tweet['nome'] ?></strong> <small class="text text-muted float-right"><?= $tweet['dt_tweet'] ?></small></p>
+							<p><?= $tweet['tweet'] ?></p>
+							<br />
+							<?php if ($tweet['id_usuario'] == $_SESSION['id']) : ?>
+								<form action="/delete_tweet" method="post">
+									<div class="col d-flex justify-content-end">
+										<button type="submit" name="id" class="btn btn-danger" value="<?= $tweet['id'] ?>"><small>Remover</small></button>
+									</div>
+								</form>
+							<?php endif; ?>
+						</div>
+					</div>
+
+				<?php
+					endforeach;
+				} else { ?>
+
+				<div class="row tweet shadow-sm">
+					<div class="col">
+						<div class="h5 text-center"><img src="https://img.icons8.com/color/48/000000/nothing-found.png">Você ainda não tem nenhum tweet</div>
+					</div>
+				</div>
+			<?php } ?>
+		</div>
+
+
+		<div class="col-md-3">
+			<div class="quemSeguir">
+				<span class="quemSeguirTitulo">Quem seguir</span><br />
+				<hr />
+				<a href="/quem_seguir" class="quemSeguirTxt">Procurar por pessoas conhecidas</a>
+			</div>
+		</div>
+
+	</div>
+</div>
